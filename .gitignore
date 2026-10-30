@@ -1,0 +1,13 @@
+# Donnees lourdes ou regenerables : connectome brut (Zenodo), circuit extrait, etat d'apprentissage
+data/raw/
+data/circuit/
+data/etat/
+
+# Caches
+__pycache__/
+.pytest_cache/
+*.pyc
+
+# Reglages locaux
+.claude/
+.env

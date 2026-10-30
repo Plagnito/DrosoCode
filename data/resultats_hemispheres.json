@@ -1,0 +1,127 @@
+{
+ "k": 2,
+ "epoques": 30,
+ "jetons": 35,
+ "cas": [
+  {
+   "circuit": "mb_right",
+   "groupes": false,
+   "graine": 42,
+   "canaux": 35,
+   "kc": 2597,
+   "mbon_par_canal": 1.0,
+   "test": 0.5422,
+   "test_top3": 0.814,
+   "app": 0.5354,
+   "secondes": 69.0
+  },
+  {
+   "circuit": "mb_right",
+   "groupes": false,
+   "graine": 7,
+   "canaux": 35,
+   "kc": 2597,
+   "mbon_par_canal": 1.0,
+   "test": 0.5395,
+   "test_top3": 0.8151,
+   "app": 0.5337,
+   "secondes": 66.8
+  },
+  {
+   "circuit": "mb_both",
+   "groupes": false,
+   "graine": 42,
+   "canaux": 35,
+   "kc": 5177,
+   "mbon_par_canal": 1.0,
+   "test": 0.5746,
+   "test_top3": 0.7753,
+   "app": 0.5834,
+   "secondes": 166.8
+  },
+  {
+   "circuit": "mb_both",
+   "groupes": false,
+   "graine": 7,
+   "canaux": 35,
+   "kc": 5177,
+   "mbon_par_canal": 1.0,
+   "test": 0.572,
+   "test_top3": 0.7795,
+   "app": 0.5824,
+   "secondes": 161.8
+  },
+  {
+   "circuit": "mb_both",
+   "groupes": true,
+   "graine": 42,
+   "canaux": 35,
+   "kc": 5177,
+   "mbon_par_canal": 2.74,
+   "test": 0.5757,
+   "test_top3": 0.8261,
+   "app": 0.582,
+   "secondes": 150.6
+  },
+  {
+   "circuit": "mb_both",
+   "groupes": true,
+   "graine": 7,
+   "canaux": 35,
+   "kc": 5177,
+   "mbon_par_canal": 2.74,
+   "test": 0.6166,
+   "test_top3": 0.8402,
+   "app": 0.6172,
+   "secondes": 149.5
+  },
+  {
+   "circuit": "mb_mcns_both",
+   "groupes": false,
+   "graine": 42,
+   "canaux": 35,
+   "kc": 4064,
+   "mbon_par_canal": 1.0,
+   "test": 0.5291,
+   "test_top3": 0.7873,
+   "app": 0.5282,
+   "secondes": 111.8
+  },
+  {
+   "circuit": "mb_mcns_both",
+   "groupes": false,
+   "graine": 7,
+   "canaux": 35,
+   "kc": 4064,
+   "mbon_par_canal": 1.0,
+   "test": 0.5668,
+   "test_top3": 0.7994,
+   "app": 0.56,
+   "secondes": 116.1
+  },
+  {
+   "circuit": "mb_mcns_both",
+   "groupes": true,
+   "graine": 42,
+   "canaux": 35,
+   "kc": 4064,
+   "mbon_par_canal": 2.66,
+   "test": 0.5809,
+   "test_top3": 0.7899,
+   "app": 0.5883,
+   "secondes": 132.7
+  },
+  {
+   "circuit": "mb_mcns_both",
+   "groupes": true,
+   "graine": 7,
+   "canaux": 35,
+   "kc": 4064,
+   "mbon_par_canal": 2.66,
+   "test": 0.5636,
+   "test_top3": 0.7611,
+   "app": 0.5665,
+   "secondes": 113.0
+  }
+ ]
+}

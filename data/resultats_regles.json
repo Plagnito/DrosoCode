@@ -1,0 +1,85 @@
+{
+  "plafonds": {
+    "lecture_libre": 0.8782,
+    "lecture_contrainte_par_le_connectome": 0.8361,
+    "part_de_synapses_reelles": 0.1891
+  },
+  "regles": {
+    "depression": [
+      {
+        "lecons": 300,
+        "precision": 0.0084,
+        "top3": 0.0798
+      },
+      {
+        "lecons": 900,
+        "precision": 0.0126,
+        "top3": 0.0798
+      },
+      {
+        "lecons": 1800,
+        "precision": 0.0168,
+        "top3": 0.0798
+      },
+      {
+        "lecons": 3000,
+        "precision": 0.0126,
+        "top3": 0.0756
+      }
+    ],
+    "bidirectionnelle": [
+      {
+        "lecons": 300,
+        "precision": 0.0084,
+        "top3": 0.1303
+      },
+      {
+        "lecons": 900,
+        "precision": 0.0672,
+        "top3": 0.1303
+      },
+      {
+        "lecons": 1800,
+        "precision": 0.0504,
+        "top3": 0.1429
+      },
+      {
+        "lecons": 3000,
+        "precision": 0.063,
+        "top3": 0.1387
+      }
+    ],
+    "delta": [
+      {
+        "lecons": 300,
+        "precision": 0.0924,
+        "top3": 0.1807
+      },
+      {
+        "lecons": 900,
+        "precision": 0.1387,
+        "top3": 0.2563
+      },
+      {
+        "lecons": 1800,
+        "precision": 0.1387,
+        "top3": 0.2479
+      },
+      {
+        "lecons": 3000,
+        "precision": 0.1345,
+        "top3": 0.2521
+      }
+    ]
+  },
+  "base": {
+    "patrons": 14,
+    "vocabulaire": 41,
+    "exemples": 238,
+    "jetons_distincts_cibles": 38,
+    "hasard": 0.0244,
+    "jeton_majoritaire": "x",
+    "base_majoritaire": 0.0924
+  },
+  "secondes": 297.1
+}

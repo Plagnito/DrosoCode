@@ -1,0 +1,17 @@
+{
+ "intact": {
+  "aretes_mbon_mbon": 386,
+  "test": 0.436,
+  "test_top3": 0.6283,
+  "app": 0.4443,
+  "secondes": 41.9
+ },
+ "MBON->MBON coupe": {
+  "aretes_mbon_mbon": 0,
+  "test": 0.4339,
+  "test_top3": 0.6294,
+  "app": 0.4355,
+  "secondes": 68.9
+ },
+ "ecart": 0.0021
+}

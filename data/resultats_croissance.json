@@ -1,0 +1,69 @@
+{
+  "base": {
+    "patrons": 14,
+    "vocabulaire": 41,
+    "exemples": 238,
+    "jetons_distincts_cibles": 38,
+    "hasard": 0.0244,
+    "jeton_majoritaire": "x",
+    "base_majoritaire": 0.0924
+  },
+  "lecons": 1200,
+  "tailles": [
+    {
+      "kc": 2597,
+      "synapses_plastiques": 23574,
+      "kc_actives": 0.2181,
+      "plafond_libre": 0.8782,
+      "plafond_connectome": 0.8361,
+      "appris": 0.1261,
+      "appris_top3": 0.2395,
+      "lecons": 1200,
+      "secondes": 40.2
+    },
+    {
+      "kc": 3597,
+      "synapses_plastiques": 32707,
+      "kc_actives": 0.2168,
+      "plafond_libre": 0.8782,
+      "plafond_connectome": 0.8739,
+      "appris": 0.2101,
+      "appris_top3": 0.3529,
+      "lecons": 1200,
+      "secondes": 91.0
+    },
+    {
+      "kc": 5597,
+      "synapses_plastiques": 50998,
+      "kc_actives": 0.2218,
+      "plafond_libre": 0.8782,
+      "plafond_connectome": 0.8782,
+      "appris": 0.3319,
+      "appris_top3": 0.416,
+      "lecons": 1200,
+      "secondes": 150.0
+    },
+    {
+      "kc": 8597,
+      "synapses_plastiques": 78319,
+      "kc_actives": 0.234,
+      "plafond_libre": 0.8782,
+      "plafond_connectome": 0.8782,
+      "appris": 0.3235,
+      "appris_top3": 0.5294,
+      "lecons": 1200,
+      "secondes": 303.3
+    }
+  ],
+  "temoin_remanie": {
+    "kc": 2597,
+    "synapses_plastiques": 23574,
+    "kc_actives": 0.2102,
+    "plafond_libre": 0.8782,
+    "plafond_connectome": 0.8739,
+    "appris": 0.1807,
+    "appris_top3": 0.3529,
+    "lecons": 1200,
+    "secondes": 32.4
+  }
+}

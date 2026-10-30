@@ -1,0 +1,29 @@
+{
+ "mb_right": {
+  "circuit": "mb_right",
+  "k": 2,
+  "cible": 0.13,
+  "taux_depart": 0.1321,
+  "taux_final": 0.1321,
+  "gain_depart": 4.0,
+  "gain_final": 4.0
+ },
+ "mb_both": {
+  "circuit": "mb_both",
+  "k": 2,
+  "cible": 0.13,
+  "taux_depart": 0.1277,
+  "taux_final": 0.1277,
+  "gain_depart": 4.0,
+  "gain_final": 4.0
+ },
+ "mb_mcns_both": {
+  "circuit": "mb_mcns_both",
+  "k": 2,
+  "cible": 0.13,
+  "taux_depart": 0.0449,
+  "taux_final": 0.127,
+  "gain_depart": 4.0,
+  "gain_final": 5.742
+ }
+}

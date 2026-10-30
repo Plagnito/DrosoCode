@@ -1,0 +1,77 @@
+{
+ "cible_kc": 0.21,
+ "points": [
+  {
+   "k": 2,
+   "regule": false,
+   "gain_apl": 3.0,
+   "kc_actives": 0.1339,
+   "libre_test": 0.6864,
+   "biologique_test": 0.6069,
+   "secondes": 52.0
+  },
+  {
+   "k": 2,
+   "regule": true,
+   "gain_apl": 0.79,
+   "kc_actives": 0.2025,
+   "libre_test": 0.6864,
+   "biologique_test": 0.5734,
+   "secondes": 40.8
+  },
+  {
+   "k": 4,
+   "regule": false,
+   "gain_apl": 3.0,
+   "kc_actives": 0.2128,
+   "libre_test": 0.712,
+   "biologique_test": 0.5708,
+   "secondes": 32.3
+  },
+  {
+   "k": 4,
+   "regule": true,
+   "gain_apl": 3.0,
+   "kc_actives": 0.2128,
+   "libre_test": 0.712,
+   "biologique_test": 0.5708,
+   "secondes": 28.7
+  },
+  {
+   "k": 8,
+   "regule": false,
+   "gain_apl": 3.0,
+   "kc_actives": 0.3403,
+   "libre_test": 0.6461,
+   "biologique_test": 0.5369,
+   "secondes": 34.4
+  },
+  {
+   "k": 8,
+   "regule": true,
+   "gain_apl": 46.42,
+   "kc_actives": 0.2416,
+   "libre_test": 0.643,
+   "biologique_test": 0.5013,
+   "secondes": 35.2
+  },
+  {
+   "k": 16,
+   "regule": false,
+   "gain_apl": 3.0,
+   "kc_actives": 0.573,
+   "libre_test": 0.598,
+   "biologique_test": 0.391,
+   "secondes": 32.9
+  },
+  {
+   "k": 16,
+   "regule": true,
+   "gain_apl": 500.0,
+   "kc_actives": 0.5689,
+   "libre_test": 0.6012,
+   "biologique_test": 0.3199,
+   "secondes": 31.9
+  }
+ ]
+}

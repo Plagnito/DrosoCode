@@ -1,0 +1,65 @@
+{
+ "epoques": 30,
+ "cas": [
+  {
+   "k": 2,
+   "croissance": 0,
+   "kc": 2597,
+   "alpn_par_jeton": 12,
+   "test": 0.5091,
+   "test_top3": 0.7423,
+   "app": 0.5065,
+   "secondes": 57.7
+  },
+  {
+   "k": 4,
+   "croissance": 0,
+   "kc": 2597,
+   "alpn_par_jeton": 12,
+   "test": 0.4307,
+   "test_top3": 0.6163,
+   "app": 0.4377,
+   "secondes": 85.5
+  },
+  {
+   "k": 8,
+   "croissance": 0,
+   "kc": 2597,
+   "alpn_par_jeton": 6,
+   "test": 0.3711,
+   "test_top3": 0.5896,
+   "app": 0.3706,
+   "secondes": 130.3
+  },
+  {
+   "k": 16,
+   "croissance": 0,
+   "kc": 2597,
+   "alpn_par_jeton": 3,
+   "test": 0.3351,
+   "test_top3": 0.575,
+   "app": 0.3243,
+   "secondes": 147.8
+  },
+  {
+   "k": 2,
+   "croissance": 3000,
+   "kc": 5597,
+   "alpn_par_jeton": 12,
+   "test": 0.656,
+   "test_top3": 0.884,
+   "app": 0.6668,
+   "secondes": 335.9
+  },
+  {
+   "k": 4,
+   "croissance": 3000,
+   "kc": 5597,
+   "alpn_par_jeton": 12,
+   "test": 0.6545,
+   "test_top3": 0.8698,
+   "app": 0.6926,
+   "secondes": 220.1
+  }
+ ]
+}

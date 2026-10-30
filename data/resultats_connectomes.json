@@ -1,0 +1,213 @@
+{
+ "k": 2,
+ "epoques": 30,
+ "circuits": [
+  {
+   "circuit": "mb_right",
+   "graine": 42,
+   "effectifs": {
+    "ALPN": 344,
+    "Kenyon_Cell": 2597,
+    "MBON": 48,
+    "DAN": 165,
+    "APL": 1
+   },
+   "kc_actives_avant": 0.1321,
+   "kc_actives_apres": 0.1321,
+   "gain": 4.0,
+   "kc": 2597,
+   "mbon_utilises": 41,
+   "synapses_plastiques": 23574,
+   "repere_libre": 0.6864,
+   "repere_biologique": 0.6069,
+   "test": 0.5672,
+   "test_top3": 0.7418,
+   "app": 0.5691,
+   "secondes": 207.7
+  },
+  {
+   "circuit": "mb_right",
+   "graine": 7,
+   "effectifs": {
+    "ALPN": 344,
+    "Kenyon_Cell": 2597,
+    "MBON": 48,
+    "DAN": 165,
+    "APL": 1
+   },
+   "kc_actives_avant": 0.1321,
+   "kc_actives_apres": 0.1321,
+   "gain": 4.0,
+   "kc": 2597,
+   "mbon_utilises": 41,
+   "synapses_plastiques": 23574,
+   "repere_libre": 0.6864,
+   "repere_biologique": 0.6069,
+   "test": 0.5614,
+   "test_top3": 0.7339,
+   "app": 0.5577,
+   "secondes": 225.4
+  },
+  {
+   "circuit": "mb_right",
+   "graine": 1234,
+   "effectifs": {
+    "ALPN": 344,
+    "Kenyon_Cell": 2597,
+    "MBON": 48,
+    "DAN": 165,
+    "APL": 1
+   },
+   "kc_actives_avant": 0.1321,
+   "kc_actives_apres": 0.1321,
+   "gain": 4.0,
+   "kc": 2597,
+   "mbon_utilises": 41,
+   "synapses_plastiques": 23574,
+   "repere_libre": 0.6864,
+   "repere_biologique": 0.6069,
+   "test": 0.5567,
+   "test_top3": 0.7418,
+   "app": 0.558,
+   "secondes": 240.0
+  },
+  {
+   "circuit": "mb_both",
+   "graine": 42,
+   "effectifs": {
+    "ALPN": 685,
+    "Kenyon_Cell": 5177,
+    "MBON": 96,
+    "DAN": 331,
+    "APL": 2
+   },
+   "kc_actives_avant": 0.1277,
+   "kc_actives_apres": 0.1277,
+   "gain": 4.0,
+   "kc": 5177,
+   "mbon_utilises": 41,
+   "synapses_plastiques": 62261,
+   "repere_libre": 0.6864,
+   "repere_biologique": 0.6226,
+   "test": 0.4914,
+   "test_top3": 0.7961,
+   "app": 0.4944,
+   "secondes": 465.4
+  },
+  {
+   "circuit": "mb_both",
+   "graine": 7,
+   "effectifs": {
+    "ALPN": 685,
+    "Kenyon_Cell": 5177,
+    "MBON": 96,
+    "DAN": 331,
+    "APL": 2
+   },
+   "kc_actives_avant": 0.1277,
+   "kc_actives_apres": 0.1277,
+   "gain": 4.0,
+   "kc": 5177,
+   "mbon_utilises": 41,
+   "synapses_plastiques": 62261,
+   "repere_libre": 0.6864,
+   "repere_biologique": 0.6226,
+   "test": 0.529,
+   "test_top3": 0.8108,
+   "app": 0.5319,
+   "secondes": 435.4
+  },
+  {
+   "circuit": "mb_both",
+   "graine": 1234,
+   "effectifs": {
+    "ALPN": 685,
+    "Kenyon_Cell": 5177,
+    "MBON": 96,
+    "DAN": 331,
+    "APL": 2
+   },
+   "kc_actives_avant": 0.1277,
+   "kc_actives_apres": 0.1277,
+   "gain": 4.0,
+   "kc": 5177,
+   "mbon_utilises": 41,
+   "synapses_plastiques": 62261,
+   "repere_libre": 0.6864,
+   "repere_biologique": 0.6226,
+   "test": 0.4924,
+   "test_top3": 0.804,
+   "app": 0.4976,
+   "secondes": 395.8
+  },
+  {
+   "circuit": "mb_mcns_both",
+   "graine": 42,
+   "effectifs": {
+    "ALPN": 686,
+    "Kenyon_Cell": 4064,
+    "MBON": 97,
+    "DAN": 340,
+    "APL": 2
+   },
+   "kc_actives_avant": 0.0449,
+   "kc_actives_apres": 0.127,
+   "gain": 5.742,
+   "kc": 4064,
+   "mbon_utilises": 41,
+   "synapses_plastiques": 61210,
+   "repere_libre": 0.6843,
+   "repere_biologique": 0.5489,
+   "test": 0.598,
+   "test_top3": 0.7689,
+   "app": 0.5922,
+   "secondes": 379.6
+  },
+  {
+   "circuit": "mb_mcns_both",
+   "graine": 7,
+   "effectifs": {
+    "ALPN": 686,
+    "Kenyon_Cell": 4064,
+    "MBON": 97,
+    "DAN": 340,
+    "APL": 2
+   },
+   "kc_actives_avant": 0.0449,
+   "kc_actives_apres": 0.127,
+   "gain": 5.742,
+   "kc": 4064,
+   "mbon_utilises": 41,
+   "synapses_plastiques": 61210,
+   "repere_libre": 0.6843,
+   "repere_biologique": 0.5489,
+   "test": 0.5719,
+   "test_top3": 0.7606,
+   "app": 0.5739,
+   "secondes": 401.7
+  },
+  {
+   "circuit": "mb_mcns_both",
+   "graine": 1234,
+   "effectifs": {
+    "ALPN": 686,
+    "Kenyon_Cell": 4064,
+    "MBON": 97,
+    "DAN": 340,
+    "APL": 2
+   },
+   "kc_actives_avant": 0.0449,
+   "kc_actives_apres": 0.127,
+   "gain": 5.742,
+   "kc": 4064,
+   "mbon_utilises": 41,
+   "synapses_plastiques": 61210,
+   "repere_libre": 0.6843,
+   "repere_biologique": 0.5489,
+   "test": 0.5928,
+   "test_top3": 0.7642,
+   "app": 0.5872,
+   "secondes": 441.5
+  }
+ ]
+}

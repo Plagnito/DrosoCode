@@ -1,0 +1,845 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DrosoCode — un vrai cerveau de mouche apprend a coder</title>
+<style>
+:root{
+  --fond:#08090c; --carte:#11141a; --carte2:#0c0f14; --bord:#20262f; --bord2:#2b333f;
+  --texte:#e8edf5; --doux:#8a95a8; --faible:#5c6677;
+  --accent:#5ad2a8; --chaud:#e8a95c; --violet:#a691e8; --bleu:#6bb3f0; --rouge:#e8707c;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--fond);color:var(--texte);
+     font:14px/1.55 ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:20;background:rgba(8,9,12,.94);
+       backdrop-filter:blur(10px);border-bottom:1px solid var(--bord);padding:14px 26px 0}
+.titre{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+h1{margin:0;font-size:19px;letter-spacing:.2px}
+h1 b{color:var(--accent)}
+.titre small{color:var(--doux);font-size:12.5px}
+.src{color:var(--faible);font-size:11.5px;margin-top:3px}
+.cles{display:flex;gap:22px;flex-wrap:wrap;margin:11px 0 0;padding-bottom:11px}
+.cle{min-width:98px}
+.cle span{display:block;color:var(--faible);font-size:10.5px;text-transform:uppercase;
+          letter-spacing:.7px}
+.cle b{font-size:19px;font-variant-numeric:tabular-nums;font-weight:650}
+.onglets{display:flex;gap:2px;overflow-x:auto}
+.onglets a{padding:8px 13px;color:var(--doux);text-decoration:none;font-size:12.5px;
+           border-bottom:2px solid transparent;white-space:nowrap}
+.onglets a:hover{color:var(--texte)}
+.onglets a.actif{color:var(--accent);border-bottom-color:var(--accent)}
+main{padding:22px 26px 60px;max-width:1560px;margin:0 auto}
+section.bloc{margin-bottom:34px;scroll-margin-top:130px}
+section.bloc>h2{margin:0 0 3px;font-size:15px;letter-spacing:.3px}
+section.bloc>p.intro{margin:0 0 14px;color:var(--doux);font-size:12.5px;max-width:84ch}
+.grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:14px}
+.carte{background:var(--carte);border:1px solid var(--bord);border-radius:11px;padding:15px}
+.carte.large{grid-column:1/-1}
+.carte h3{margin:0 0 11px;font-size:11.5px;text-transform:uppercase;letter-spacing:.9px;
+          color:var(--doux);font-weight:650;display:flex;justify-content:space-between;
+          align-items:center;gap:8px}
+.stats{display:grid;grid-template-columns:1fr auto;gap:4px 14px;
+       font-variant-numeric:tabular-nums;font-size:13px}
+.stats b{font-weight:600;color:var(--accent)}
+.stats span{color:var(--doux)}
+.stats .fort{color:var(--texte)!important;font-size:15px}
+input,select,button{font:inherit;border-radius:7px;border:1px solid var(--bord2);
+  background:var(--carte2);color:var(--texte);padding:7px 10px}
+input[type=number]{font-variant-numeric:tabular-nums}
+button{background:var(--accent);color:#04231a;border:0;font-weight:650;cursor:pointer}
+button:hover:not(:disabled){filter:brightness(1.12)}
+button:disabled{opacity:.38;cursor:not-allowed}
+button.sec{background:#1a212b;color:var(--texte)}
+button.danger{background:#39202a;color:#f3aeb6}
+.ligne{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:9px}
+.ligne label{color:var(--faible);font-size:11.5px}
+.ligne input[type=text]{flex:1;min-width:160px}
+svg.graph{width:100%;height:auto;display:block}
+.axe{fill:var(--doux);font-size:11px}
+.axe.fin{fill:var(--faible);font-size:10px}
+.axe.val{fill:var(--texte);font-variant-numeric:tabular-nums;font-size:11px}
+.grille-l{stroke:#1b2129;stroke-width:1}
+.repere{stroke:var(--chaud);stroke-width:1;stroke-dasharray:4 3;opacity:.75}
+.marque{stroke:var(--violet);stroke-width:1;stroke-dasharray:2 3;opacity:.7}
+.fond-barre{fill:#1a2029}
+.legende{display:flex;gap:14px;flex-wrap:wrap;margin-top:7px;color:var(--doux);font-size:11.5px}
+.legende i{display:inline-block;width:10px;height:3px;border-radius:2px;
+           margin-right:5px;vertical-align:middle}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:5px 7px;border-bottom:1px solid var(--bord);font-size:12.5px}
+th{color:var(--faible);font-weight:650;font-size:10.5px;text-transform:uppercase;
+   letter-spacing:.6px}
+td.n,th.n{text-align:right}
+.note{color:var(--doux);font-size:12px;margin-top:11px;border-left:2px solid var(--bord2);
+      padding-left:11px}
+.note b{color:var(--texte)}
+.note.alerte{border-left-color:var(--chaud)}
+.pastille{display:inline-block;padding:1px 8px;border-radius:20px;font-size:10.5px;
+  background:#1a212b;color:var(--doux);border:1px solid var(--bord2);white-space:nowrap}
+.pastille.actif{background:#0f2e26;color:var(--accent);border-color:#1d5a49}
+.pastille.gpu{background:#122437;color:var(--bleu);border-color:#1d4468}
+.err{color:var(--rouge);font-size:12px;margin-top:7px;min-height:15px}
+#grille-kc{display:grid;grid-template-columns:repeat(48,1fr);gap:1.5px;margin-top:9px}
+#grille-kc i{aspect-ratio:1;border-radius:1px;display:block;background:#161c24}
+.votes{display:flex;flex-direction:column;gap:4px;margin-top:5px}
+.vote{display:grid;grid-template-columns:54px 1fr 52px;gap:8px;align-items:center;
+      font-variant-numeric:tabular-nums}
+.vote code{background:var(--carte2);border:1px solid var(--bord2);border-radius:4px;
+  padding:2px 4px;text-align:center;font-size:11.5px;white-space:nowrap;overflow:hidden}
+.jauge{height:8px;background:#1a2029;border-radius:4px;overflow:hidden}
+.jauge i{display:block;height:100%;background:var(--accent)}
+.vote:first-child .jauge i{background:var(--chaud)}
+.vote small{color:var(--doux);font-size:10.5px;text-align:right}
+.jetons{display:flex;flex-wrap:wrap;gap:3px;margin-top:7px}
+.jetons code{background:var(--carte2);border:1px solid var(--bord);border-radius:4px;
+  padding:1px 5px;font-size:10.5px;cursor:pointer;color:var(--doux)}
+.jetons code:hover{border-color:var(--accent);color:var(--texte)}
+.defile{max-height:250px;overflow:auto}
+.chemin{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:4px 0 12px}
+.etage{background:var(--carte2);border:1px solid var(--bord2);border-radius:8px;
+       padding:7px 11px;text-align:center;min-width:86px}
+.etage b{display:block;font-size:16px;font-variant-numeric:tabular-nums}
+.etage span{color:var(--faible);font-size:10px;text-transform:uppercase;letter-spacing:.6px}
+.fleche{color:var(--faible);font-size:15px}
+.etage.inhib{border-color:#4a3340} .etage.inhib b{color:var(--rouge)}
+.etage.mod{border-color:#453a28} .etage.mod b{color:var(--chaud)}
+</style>
+</head>
+<body>
+<header>
+  <div class="titre">
+    <h1>Droso<b>Code</b></h1>
+    <small>un vrai cerveau de mouche apprend a predire du code</small>
+    <span id="moteur" class="pastille">…</span>
+  </div>
+  <div class="src" id="src">chargement…</div>
+  <div class="cles" id="cles"></div>
+  <nav class="onglets" id="nav">
+    <a href="#circuit" class="actif">Le circuit</a>
+    <a href="#essai">Essayer</a>
+    <a href="#apprendre">Apprendre</a>
+    <a href="#corpus">Corpus</a>
+    <a href="#mesures">Mesures</a>
+    <a href="#limites">Limites</a>
+  </nav>
+</header>
+
+<main>
+  <section class="bloc" id="circuit">
+    <h2>Le circuit</h2>
+    <p class="intro">Le corps pedoncule d'une drosophile, extrait du connectome FlyWire.
+      Aucune connexion native n'est tiree au hasard : chaque synapse a ete reconstruite
+      par microscopie electronique sur un cerveau reel.</p>
+    <div class="grille">
+      <div class="carte large">
+        <h3>La voie <span class="pastille" id="p-taille"></span></h3>
+        <div class="chemin" id="chemin"></div>
+        <div class="stats" id="stats-circuit"></div>
+      </div>
+      <div class="carte">
+        <h3>Griffes par Kenyon cell <span class="pastille" id="p-griffes"></span></h3>
+        <div id="g-griffes"></div>
+        <div class="note">Chaque Kenyon cell echantillonne une poignee de neurones de
+          projection. La mediane mesuree est la valeur biologique connue.</div>
+      </div>
+      <div class="carte">
+        <h3>Kenyon cells afferentes par MBON</h3>
+        <div id="g-mbon"></div>
+        <div class="note alerte" id="n-mbon"></div>
+      </div>
+      <div class="carte">
+        <h3>Synapses par paire connectee</h3>
+        <div id="g-synapses"></div>
+        <div class="note">⚠️ Les paires KC→MBON sont peu synaptiques <b>par nature</b>.
+          Un seuil de 5 synapses, courant dans les analyses FlyWire, fait tomber la
+          densite de 18,9 % a 6,0 % et efface de vraies connexions.</div>
+      </div>
+      <div class="carte">
+        <h3>Types de Kenyon cells</h3>
+        <table id="t-types"></table>
+        <div class="note">Les <b>KCg-d</b> sont les Kenyon cells <b>visuelles</b> : elles
+          ne recoivent rien de l'antenne. Leur absence d'entree olfactive est de la
+          biologie, pas une extraction ratee.</div>
+      </div>
+      <div class="carte">
+        <h3>Neurotransmetteurs</h3>
+        <table id="t-nt"></table>
+        <div class="note alerte">⚠️ Le predicteur de FlyWire classe <b>5 172 des 5 177</b>
+          Kenyon cells en « dopamine ». La litterature les donne <b>toutes</b>
+          cholinergiques. On lit <code>known_nt</code> d'abord.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloc" id="essai">
+    <h2>Essayer</h2>
+    <p class="intro">Donnez un debut de code a la mouche. Il entre par les neurones de
+      projection, allume un motif de Kenyon cells, et les MBON votent pour le jeton
+      suivant. Un jeton = un MBON : il n'y a aucune couche de lecture ajoutee.</p>
+    <div class="carte large">
+      <div class="ligne">
+        <input id="ctx" type="text" value="def f ( x ) : NL IND return" spellcheck="false">
+        <button id="btn-prop">Proposer</button>
+      </div>
+      <div class="jetons" id="palette"></div>
+      <div class="err" id="err"></div>
+      <div id="res" style="display:none">
+        <div class="grille" style="margin-top:12px">
+          <div class="carte large" style="background:var(--carte2)">
+            <h3>Kenyon cells actives <span class="pastille" id="p-kc"></span></h3>
+            <div id="grille-kc"></div>
+            <div class="note">Chaque carre est une Kenyon cell reelle (960 premieres).
+              Un contexte different allume un motif different — c'est ce motif que les
+              MBON apprennent a lire.</div>
+          </div>
+          <div class="carte" style="background:var(--carte2)">
+            <h3>Vote des MBON</h3>
+            <div class="votes" id="votes"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloc" id="apprendre">
+    <h2>Apprendre</h2>
+    <p class="intro">Seule la <b>generalisation</b> compte : elle porte sur des extraits
+      de code que la mouche n'a jamais vus. Le corpus est decoupe par extrait, jamais
+      par exemple — sinon des morceaux du meme extrait fuient des deux cotes.</p>
+    <div class="grille">
+      <div class="carte">
+        <h3>Entrainer</h3>
+        <div class="ligne">
+          <label>epoques</label><input id="epoques" type="number" value="12" min="1" max="200" style="width:66px">
+          <label>pas</label><input id="taux" type="number" value="30" min="0.1" max="10000" step="0.1" style="width:72px">
+          <button id="btn-lot">Par lots</button>
+        </div>
+        <div class="ligne">
+          <label>naitre</label><input id="nkc" type="number" value="1500" min="1" max="20000" style="width:82px">
+          <label>KC</label>
+          <button id="btn-croitre" class="sec">Neurogenese</button>
+          <button id="btn-reset" class="danger">Repartir de zero</button>
+        </div>
+        <div class="stats" id="stats-appr"></div>
+        <div class="err" id="err-appr"></div>
+      </div>
+      <div class="carte">
+        <h3>Amelioration automatique <span class="pastille" id="p-amelio">au repos</span></h3>
+        <div class="ligne">
+          <label>cycles</label><input id="a-cycles" type="number" value="6" min="1" max="50" style="width:60px">
+          <label>lecons</label><input id="a-lecons" type="number" value="400" min="1" max="2000" style="width:70px">
+          <label>KC si stagnation</label><input id="a-croissance" type="number" value="800" min="0" max="5000" style="width:70px">
+          <button id="btn-amelio">Lancer</button>
+          <button id="btn-stop" class="sec" disabled>Arreter</button>
+        </div>
+        <div class="err" id="err-amelio"></div>
+        <div class="defile"><table id="journal"></table></div>
+      </div>
+      <div class="carte large">
+        <h3>La meilleure mouche <span class="pastille" id="p-meilleure"></span></h3>
+        <div id="g-meilleure"></div>
+        <div class="note" id="n-meilleure"></div>
+      </div>
+      <div class="carte large">
+        <h3>Courbe d'apprentissage <span class="pastille" id="p-courbe"></span></h3>
+        <div id="g-courbe"></div>
+        <div class="note" id="n-courbe"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloc" id="corpus">
+    <h2>Le corpus</h2>
+    <p class="intro">Du vrai code Python, reduit au vocabulaire de la mouche. Un jeton =
+      un MBON, et le circuit n'en a que 48 : on ne peut pas elargir le vocabulaire, il
+      faut reduire le code. Les identifiants deviennent x/y/n/i/f, les nombres 0/1/2,
+      la structure syntaxique reste intacte.</p>
+    <div class="grille">
+      <div class="carte">
+        <h3>Provenance</h3>
+        <div class="stats" id="stats-corpus"></div>
+        <div class="note">Un extrait contenant un mot-cle absent du vocabulaire
+          (<code>is</code>, <code>lambda</code>, <code>try</code>) est <b>rejete</b> : le
+          laisser passer le transformerait en identifiant et enseignerait une grammaire
+          fausse.</div>
+      </div>
+      <div class="carte">
+        <h3>Longueur des extraits</h3>
+        <div id="g-longueurs"></div>
+      </div>
+      <div class="carte large">
+        <h3>Frequence des jetons</h3>
+        <div id="g-frequences"></div>
+        <div class="note" id="n-frequences"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloc" id="mesures">
+    <h2>Mesures</h2>
+    <p class="intro">Toutes les valeurs ci-dessous portent sur les extraits
+      <b>retenus</b>, jamais vus a l'entrainement.</p>
+    <div class="grille">
+      <div class="carte large">
+        <h3>Ce que le circuit permet</h3>
+        <div id="g-plafonds"></div>
+        <div class="note" id="n-plafonds"></div>
+      </div>
+      <div class="carte large">
+        <h3>Grandir sert-il ? — neurogenese</h3>
+        <div id="g-croissance"></div>
+        <table id="t-croissance"></table>
+        <div class="note" id="n-croissance"></div>
+      </div>
+      <div class="carte large">
+        <h3>Combien de contexte faut-il ?</h3>
+        <div id="g-contexte"></div>
+        <div class="note alerte" id="n-contexte"></div>
+      </div>
+      <div class="carte large">
+        <h3>Trois connectomes, la meme tache</h3>
+        <div id="g-hemispheres"></div>
+        <table id="t-connectomes"></table>
+        <div class="note" id="n-connectomes"></div>
+      </div>
+      <div class="carte large">
+        <h3>Contexte : ce que le RESEAU fait vraiment</h3>
+        <div id="g-ctx-reel"></div>
+        <div class="note" id="n-ctx-reel"></div>
+      </div>
+      <div class="carte large">
+        <h3>Ou est le vrai goulot ? — saturation de l'entree</h3>
+        <div id="g-budget"></div>
+        <table id="t-gain"></table>
+        <div class="note alerte" id="n-budget"></div>
+      </div>
+      <div class="carte">
+        <h3>Regles d'apprentissage</h3>
+        <table id="t-regles"></table>
+        <div class="note">La regle de la mouche est la <b>depression</b> : la dopamine
+          affaiblit la synapse Kenyon cell → MBON active. On apprend en ecartant les
+          mauvaises reponses, jamais en renforcant la bonne.</div>
+      </div>
+      <div class="carte">
+        <h3>Temoins</h3>
+        <table id="t-temoins"></table>
+        <div class="note" id="n-temoins"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloc" id="limites">
+    <h2>Ce que ce projet ne pretend pas</h2>
+    <div class="carte large">
+      <div class="note">Ce n'est <b>pas</b> une simulation fidele de la drosophile : les
+        gains, les seuils et le pas de temps sont des reglages, pas des mesures
+        biologiques.</div>
+      <div class="note">La mouche ne comprend rien. Elle associe un motif d'activite a une
+        sortie — ce que son corps pedoncule fait reellement pour les odeurs.</div>
+      <div class="note">Les Kenyon cells neoformees imitent la <b>statistique</b> du
+        cablage reel, pas une mouche plus grosse qui existerait.</div>
+      <div class="note alerte">Les reperes lineaires ne sont <b>pas des plafonds du
+        reseau</b> : ce sont les meilleures lectures lineaires du code des Kenyon cells,
+        et le reseau n'est pas une fonction lineaire de ce code. A taille egale il reste
+        dessous ; sur un cerveau agrandi il peut passer devant.</div>
+    </div>
+  </section>
+</main>
+
+<script src="/static/chart.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const nf = n => Number.isFinite(n) ? n.toLocaleString('fr-FR') : '—';
+const pc = v => Number.isFinite(v) ? (v * 100).toFixed(1).replace('.', ',') + ' %' : '—';
+const esc = s => String(s).replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+const CO = {accent:'#5ad2a8', chaud:'#e8a95c', violet:'#a691e8', bleu:'#6bb3f0'};
+let sondage = null;
+
+async function api(url, opt) {
+  const r = await fetch(url, opt);
+  const j = await r.json().catch(() => ({ok:false, erreur:'reponse illisible'}));
+  if (!r.ok || j.ok === false) {
+    const e = new Error(j.erreur || ('HTTP ' + r.status)); e.statut = r.status; throw e;
+  }
+  return j;
+}
+const lignes = (el, l) => el.innerHTML = l.map(p =>
+  '<span' + (p[2] ? ' class="' + p[2] + '"' : '') + '>' + p[0] + '</span><b'
+  + (p[2] ? ' class="' + p[2] + '"' : '') + '>' + p[1] + '</b>').join('');
+const tableau = (el, entetes, corps) => el.innerHTML =
+  '<tr>' + entetes.map(h => '<th class="' + (h[1] || '') + '">' + h[0] + '</th>').join('')
+  + '</tr>' + corps.join('');
+
+function panneauVide(el, e, cmd) {
+  if (e && e.statut === 404) {
+    el.innerHTML = '<span class="note">Pas encore mesure. Lancer <code>' + cmd + '</code>.</span>';
+  } else {
+    console.error(cmd, e);
+    el.innerHTML = '<span class="err">Mesure presente mais illisible : '
+      + esc(e && e.message || e) + '</span>';
+  }
+}
+
+function majCles(c) {
+  const q = c.capacite, e = c.dernier, co = c.corpus;
+  $('#cles').innerHTML = [
+    ['Kenyon cells', nf(q.kc), q.kc_neoformees ? '+' + nf(q.kc_neoformees) + ' neoformees' : 'natives'],
+    ['Synapses plastiques', nf(q.synapses_plastiques), 'KC → MBON'],
+    ['Extraits', nf(co.patrons_app) + ' / ' + nf(co.patrons_test), 'appris / retenus'],
+    ['Generalisation', e ? pc(e.precision_test) : '—', 'majoritaire ' + pc(co.base_majoritaire_test)],
+    ['Top-3', e ? pc(e.precision_test_top3) : '—', 'hasard ' + pc(co.hasard)],
+    ['Lecons', nf(q.lecons), 'exemples vus']
+  ].map(x => '<div class="cle"><span>' + x[0] + '</span><b>' + x[1] + '</b><span>'
+      + x[2] + '</span></div>').join('');
+}
+
+function majCircuit(c) {
+  const q = c.capacite;
+  $('#p-taille').textContent = nf(q.neurones) + ' neurones';
+  const et = (n, v) => '<div class="etage"><b>' + nf(v) + '</b><span>' + n + '</span></div>';
+  $('#chemin').innerHTML = et('ALPN', q.pn) + '<span class="fleche">→</span>'
+    + et('Kenyon cells', q.kc) + '<span class="fleche">→</span>' + et('MBON', q.mbon)
+    + '<span class="fleche">+</span>'
+    + '<div class="etage inhib"><b>1</b><span>APL inhibiteur</span></div>'
+    + '<div class="etage mod"><b>' + nf(q.dan) + '</b><span>DAN dopamine</span></div>';
+  lignes($('#stats-circuit'), [
+    ['Kenyon cells natives', nf(q.kc_natives)],
+    ['Kenyon cells neoformees', q.kc_neoformees ? '+' + nf(q.kc_neoformees) : '—'],
+    ['Synapses ionotropiques', nf(q.synapses_ionotropiques)],
+    ['Synapses modulatrices (dopamine)', nf(q.synapses_modulatrices)],
+    ['Synapses plastiques KC → MBON', nf(q.synapses_plastiques)],
+    ['Canaux de sortie utilises', q.canaux_utilises + ' / ' + q.vocabulaire]
+  ]);
+}
+
+async function chargerStatsCircuit() {
+  const s = await api('/api/stats/circuit');
+  G.histo($('#g-griffes'), s.griffes.hist, {couleur: CO.accent,
+    legende: 'neurones de projection par KC'});
+  $('#p-griffes').textContent = 'mediane ' + s.griffes.mediane;
+  G.profil($('#g-mbon'), s.kc_par_mbon.tri, {seuil: 50, couleur: CO.bleu,
+    nom_seuil: 'seuil d utilisabilite (50)', legende: '48 MBON, tries'});
+  $('#n-mbon').innerHTML = '⚠️ Les MBON vont de <b>' + s.kc_par_mbon.min + '</b> a <b>'
+    + nf(s.kc_par_mbon.max) + '</b> Kenyon cells afferentes. Associer naivement '
+    + '« jeton i → MBON i » ferait gagner toujours les memes MBON quel que soit le code : '
+    + 'on n utilise que ceux qui ont au moins 50 afferentes, et on compare chaque MBON a '
+    + 'sa propre ligne de base.';
+  G.histo($('#g-synapses'), s.synapses_par_paire.hist, {couleur: CO.violet,
+    legende: 'synapses par paire KC→MBON'});
+  tableau($('#t-types'), [['Type'], ['Neurones', 'n']],
+    s.types_kc.map(t => '<tr><td>' + esc(t[0]) + '</td><td class="n">' + nf(t[1]) + '</td></tr>'));
+  tableau($('#t-nt'), [['Neurotransmetteur'], ['Neurones', 'n']],
+    s.neurotransmetteurs.map(t => '<tr><td>' + esc(t[0]) + '</td><td class="n">'
+      + nf(t[1]) + '</td></tr>'));
+}
+
+async function chargerCorpus() {
+  const c = await api('/api/stats/corpus');
+  lignes($('#stats-corpus'), [
+    ['Source', esc(c.source)], ['Extraits distincts', nf(c.extraits)],
+    ['Jetons', nf(c.jetons)],
+    ['Extraits appris / retenus', nf(c.decoupe.app) + ' / ' + nf(c.decoupe.test)],
+    ['Exemples appris / retenus', nf(c.exemples_app) + ' / ' + nf(c.exemples_test)],
+    ['Longueur mediane', c.longueurs.mediane + ' jetons']
+  ]);
+  G.histo($('#g-longueurs'), c.longueurs.hist, {couleur: CO.chaud, legende: 'jetons par extrait'});
+  G.barres($('#g-frequences'), c.frequences.slice(0, 20).map(f =>
+    ({nom: f.jeton, v: f.part, couleur: CO.bleu, texte: nf(f.n)})),
+    {largeur_label: 74, hauteur_ligne: 22});
+  $('#n-frequences').innerHTML = 'Le jeton le plus frequent est <code>'
+    + esc(c.jeton_majoritaire) + '</code> : le repeter toujours donnerait <b>'
+    + pc(c.base_majoritaire_test) + '</b> sur les extraits retenus. C est la barre a '
+    + 'battre, pas le hasard (' + pc(c.hasard) + ').';
+}
+
+async function chargerPlafonds() {
+  try {
+    const r = await api('/api/resultats'), p = r.plafonds;
+    const items = [
+      {nom: 'Lecteur lineaire libre', v: p.lecture_libre_test ?? p.lecture_libre, couleur: CO.bleu},
+      {nom: 'Restreint aux synapses reelles',
+       v: p.lecture_contrainte_test ?? p.lecture_contrainte_par_le_connectome, couleur: CO.violet}
+    ];
+    if (p.biologique_test !== undefined)
+      items.push({nom: '+ poids positifs (cholinergiques)', v: p.biologique_test, couleur: CO.accent});
+    items.push({nom: 'Jeton majoritaire',
+                v: r.base.base_majoritaire_test ?? r.base.base_majoritaire, couleur: CO.chaud});
+    items.push({nom: 'Hasard', v: r.base.hasard, couleur: '#3a4450'});
+    G.barres($('#g-plafonds'), items, {vmax: 1, largeur_label: 262});
+    $('#n-plafonds').innerHTML = 'Seuls <b>' + pc(p.part_de_synapses_reelles) + '</b> des '
+      + 'couples (Kenyon cell, MBON) existent dans le connectome, et cela ne coute presque '
+      + 'rien au lecteur. La contrainte qui mord vraiment est la <b>positivite</b> : une '
+      + 'Kenyon cell est cholinergique, le reseau ne peut jamais former un poids negatif.';
+    tableau($('#t-regles'), [['Regle'], ['Lecons', 'n'], ['Precision', 'n'], ['Top-3', 'n']],
+      Object.keys(r.regles).map(nom => {
+        const c = r.regles[nom], f = c[c.length - 1];
+        return '<tr><td>' + nom + '</td><td class="n">' + nf(f.lecons) + '</td><td class="n">'
+          + pc(f.precision) + '</td><td class="n">' + pc(f.top3) + '</td></tr>';
+      }));
+  } catch (e) { panneauVide($('#g-plafonds'), e, 'python scripts/comparer_regles.py'); }
+}
+
+async function chargerCroissance() {
+  try {
+    const r = await api('/api/croissance');
+    G.courbe($('#g-croissance'), [
+      {nom: 'Repere du connectome', couleur: CO.violet,
+       points: r.tailles.map(t => ({x: t.kc, y: t.plafond_connectome}))},
+      {nom: 'Appris', couleur: CO.accent, points: r.tailles.map(t => ({x: t.kc, y: t.appris}))},
+      {nom: 'Top-3', couleur: CO.bleu, points: r.tailles.map(t => ({x: t.kc, y: t.appris_top3}))}
+    ], {x: 'Kenyon cells', hauteur: 240});
+    const tm = r.temoin_remanie;
+    tableau($('#t-croissance'),
+      [['Taille'], ['Synapses', 'n'], ['Repere', 'n'], ['Appris', 'n'], ['Top-3', 'n']],
+      r.tailles.map(t => '<tr><td>' + nf(t.kc) + ' KC</td><td class="n">'
+        + nf(t.synapses_plastiques) + '</td><td class="n">' + pc(t.plafond_connectome)
+        + '</td><td class="n">' + pc(t.appris) + '</td><td class="n">' + pc(t.appris_top3)
+        + '</td></tr>').concat(tm ? ['<tr><td>temoin remanie <span class="pastille">'
+        + 'memes degres</span></td><td class="n">' + nf(tm.synapses_plastiques)
+        + '</td><td class="n">' + pc(tm.plafond_connectome) + '</td><td class="n">'
+        + pc(tm.appris) + '</td><td class="n">' + pc(tm.appris_top3) + '</td></tr>'] : []));
+    if (tm) $('#n-croissance').innerHTML = '⚠️ <b>Le temoin dit l inverse de ce qu on '
+      + 'espere.</b> A taille et degres identiques, un cablage <b>remanie au hasard</b> '
+      + 'apprend mieux que le vrai (' + pc(tm.appris) + ' contre ' + pc(r.tailles[0].appris)
+      + '). La structure reelle du corps pedoncule est une contrainte pour cette tache, '
+      + 'pas un avantage — attendu, ce circuit n a pas evolue pour lire du Python. Sans '
+      + 'temoin on ne pourrait que le supposer.';
+  } catch (e) { panneauVide($('#g-croissance'), e, 'python scripts/courbe_croissance.py'); }
+}
+
+async function chargerContexte() {
+  try {
+    const r = await api('/api/contexte');
+    G.courbe($('#g-contexte'), [
+      {nom: 'Lecteur libre', couleur: CO.bleu, points: r.k.map(d => ({x: d.k, y: d.libre_test}))},
+      {nom: 'Restreint au cablage', couleur: CO.violet,
+       points: r.k.map(d => ({x: d.k, y: d.connectome_test}))},
+      {nom: '+ poids positifs', couleur: CO.accent,
+       points: r.k.map(d => ({x: d.k, y: d.biologique_test}))},
+      {nom: 'Kenyon cells actives', couleur: CO.chaud,
+       points: r.k.map(d => ({x: d.k, y: d.kc_actives}))}
+    ], {x: 'jetons de contexte (k)', hauteur: 250});
+    const best = r.k.reduce((a, b) => b.biologique_test > a.biologique_test ? b : a);
+    const pire = r.k[r.k.length - 1];
+    $('#n-contexte').innerHTML = '⚠️ <b>Allonger le contexte DEGRADE la mouche</b>, et la '
+      + 'cause est la courbe orange : a k=' + pire.k + ', <b>' + pc(pire.kc_actives)
+      + '</b> des Kenyon cells sont actives. L encodeur noie le code epars, et c est la '
+      + 'parcimonie qui fait toute la discriminabilite du corps pedoncule. L optimum '
+      + 'mesure est <b>k=' + best.k + '</b> (' + pc(best.biologique_test) + '). Donner '
+      + 'plus de contexte exige d abord un <b>controle de gain</b> qui tienne la '
+      + 'parcimonie — ce que le neurone APL fait chez la vraie mouche.';
+  } catch (e) { panneauVide($('#g-contexte'), e, 'python scripts/balayage_contexte.py'); }
+}
+
+async function chargerMeilleure() {
+  try {
+    const r = await api('/api/meilleure'), e = r.etapes || [];
+    if (!e.length) throw new Error('aucune etape');
+    const marques = [];
+    for (let i = 1; i < e.length; i++)
+      if (e[i].kc !== e[i - 1].kc)
+        marques.push({x: i + 1, nom: nf(e[i].kc) + ' KC'});
+    const rep = r.plafonds && r.plafonds.biologique_test !== undefined
+      ? [{nom: 'repere biologique', y: r.plafonds.biologique_test, couleur: CO.chaud}] : [];
+    G.courbe($('#g-meilleure'), [
+      {nom: 'Generalisation', couleur: CO.accent, points: e.map((p, i) => ({x: i + 1, y: p.test}))},
+      {nom: 'Top-3', couleur: CO.bleu, points: e.map((p, i) => ({x: i + 1, y: p.test_top3}))},
+      {nom: 'Extraits appris', couleur: CO.violet, points: e.map((p, i) => ({x: i + 1, y: p.app}))}
+    ], {x: 'epoques cumulees', hauteur: 280, marques: marques, reperes: rep});
+    const b = r.meilleur, f = e[e.length - 1];
+    $('#p-meilleure').textContent = nf(f.kc) + ' KC · ' + (r.reglages ? r.reglages.jetons + ' jetons' : '');
+    $('#n-meilleure').innerHTML = 'Tous les leviers mesures ensemble : <b>deux hemispheres</b>, '
+      + '<b>canaux groupes par type cellulaire</b>, contexte k=' + (r.reglages ? r.reglages.k : 2)
+      + ', pas ' + (r.reglages ? r.reglages.taux : 30) + ', parcimonie calibree, neurogenese par paliers. '
+      + 'Meilleur point : <b>' + pc(b.test) + '</b> (top-3 ' + pc(b.test_top3) + ') a '
+      + nf(b.kc) + ' Kenyon cells. ⚠️ Sur <b>' + (r.reglages ? r.reglages.jetons : 35)
+      + ' jetons</b> et non 41 — il n existe que 35 types de MBON, et un canal groupe en '
+      + 'demande un. Ce chiffre ne se compare donc pas aux mesures a 41 jetons.';
+  } catch (e) { panneauVide($('#g-meilleure'), e, 'python scripts/meilleure_mouche.py'); }
+}
+
+async function chargerHemispheres() {
+  try {
+    const r = await api('/api/hemispheres'), cas = r.cas || [];
+    const cles = [...new Set(cas.map(d => d.circuit + '|' + d.groupes))];
+    const items = cles.map(k => {
+      const [c, g] = k.split('|');
+      const v = cas.filter(d => d.circuit + '|' + d.groupes === k).map(d => d.test);
+      return {nom: c + (g === 'true' ? ' — canaux groupes' : ' — canaux simples'),
+              v: v.reduce((a, b) => a + b, 0) / v.length,
+              couleur: g === 'true' ? CO.accent : CO.violet};
+    }).sort((a, b) => b.v - a.v);
+    G.barres($('#g-hemispheres'), items, {largeur_label: 290, vmax: 0.7});
+  } catch (e) { /* panneau optionnel */ }
+}
+
+async function chargerConnectomes() {
+  try {
+    const r = await api('/api/connectomes'), c = r.circuits;
+    tableau($('#t-connectomes'),
+      [['Connectome'], ['Kenyon cells', 'n'], ['MBON', 'n'], ['Synapses', 'n'],
+       ['Repere', 'n'], ['Generalisation', 'n'], ['Top-3', 'n']],
+      c.map(d => '<tr><td>' + esc(d.circuit) + '</td><td class="n">' + nf(d.kc)
+        + '</td><td class="n">' + nf(d.effectifs.MBON) + '</td><td class="n">'
+        + nf(d.synapses_plastiques) + '</td><td class="n">' + pc(d.repere_biologique)
+        + '</td><td class="n"><b>' + pc(d.test) + '</b></td><td class="n">'
+        + pc(d.test_top3) + '</td></tr>'));
+    const b = c.reduce((a, d) => d.test > a.test ? d : a);
+    $('#n-connectomes').innerHTML = 'Meme vocabulaire, meme corpus, meme entrainement : '
+      + 'la comparaison porte sur le <b>cablage</b> et rien d autre. Meilleur : <b>'
+      + esc(b.circuit) + '</b> a ' + pc(b.test) + '. <code>mb_right</code> = FlyWire '
+      + 'femelle un hemisphere, <code>mb_both</code> = FlyWire les deux, '
+      + '<code>mb_mcns_both</code> = le systeme nerveux central du male (Google Research '
+      + '+ HHMI Janelia, Cell 2026).';
+  } catch (e) { panneauVide($('#t-connectomes'), e, 'python scripts/comparer_connectomes.py'); }
+}
+
+async function chargerCtxReel() {
+  try {
+    const r = await api('/api/contexte-reel'), cas = r.cas.filter(d => !d.croissance);
+    G.courbe($('#g-ctx-reel'), [
+      {nom: 'Generalisation (reseau entraine)', couleur: CO.accent,
+       points: cas.map(d => ({x: d.k, y: d.test}))},
+      {nom: 'Top-3', couleur: CO.bleu, points: cas.map(d => ({x: d.k, y: d.test_top3}))}
+    ], {x: 'jetons de contexte (k)', hauteur: 230});
+    const b = cas.reduce((a, d) => d.test > a.test ? d : a);
+    $('#n-ctx-reel').innerHTML = 'Le repere lineaire classait <b>k=' + b.k + '</b> en tete ; '
+      + 'le reseau entraine le confirme (' + pc(b.test) + '). Notre reglage historique etait '
+      + 'k=4 — le mauvais.';
+  } catch (e) { panneauVide($('#g-ctx-reel'), e, 'python scripts/comparer_contexte.py'); }
+}
+
+async function chargerBudget() {
+  // Les deux mesures sont independantes : un panneau incomplet ne doit pas faire
+  // disparaitre l'autre. C'est exactement ce qu'un `return` anticipe provoquait.
+  try {
+    const gain = await api('/api/gain');
+    if (gain.points && gain.points.length) tableau($('#t-gain'),
+      [['Contexte'], ['APL', 'n'], ['Gain', 'n'], ['KC actives', 'n'], ['Repere', 'n']],
+      gain.points.map(d => '<tr><td>k=' + d.k + '</td><td>'
+        + (d.regule ? 'regule' : 'fixe') + '</td><td class="n">' + d.gain_apl
+        + '</td><td class="n">' + pc(d.kc_actives) + '</td><td class="n">'
+        + pc(d.biologique_test) + '</td></tr>'));
+  } catch (e) { /* mesure optionnelle */ }
+  try {
+    const b = await api('/api/budget'), p = b.points || [];
+    const fixe = p.filter(d => !d.budget), cst = p.filter(d => d.budget);
+    // Le script ecrit apres CHAQUE condition : le fichier peut ne contenir qu'une
+    // moitie de paire pendant qu'il tourne. Un `reduce` sur un tableau vide leve.
+    if (!fixe.length || !cst.length) {
+      $('#g-budget').innerHTML = '<span class="note">Mesure en cours — '
+        + p.length + ' condition(s) sur 8 ecrites.</span>';
+      return;
+    }
+    G.courbe($('#g-budget'), [
+      {nom: '12 ALPN/jeton — repere', couleur: CO.violet,
+       points: fixe.map(d => ({x: d.k, y: d.biologique_test}))},
+      {nom: 'budget constant — repere', couleur: CO.accent,
+       points: cst.map(d => ({x: d.k, y: d.biologique_test}))},
+      {nom: '12 ALPN/jeton — recouvrement des entrees', couleur: CO.chaud,
+       points: fixe.map(d => ({x: d.k, y: d.recouvrement}))},
+      {nom: 'budget constant — recouvrement', couleur: CO.bleu,
+       points: cst.map(d => ({x: d.k, y: d.recouvrement}))}
+    ], {x: 'jetons de contexte (k)', hauteur: 250});
+    const m = cst.reduce((a, d) => d.biologique_test > a.biologique_test ? d : a);
+    const f0 = fixe.find(d => d.k === m.k);
+    $('#n-budget').innerHTML = '⚠️ <b>La saturation est EN AMONT du corps pedoncule.</b> '
+      + 'Chaque jeton allume 12 ALPN fixes, donc k jetons en allument 12k : a k=16 c est '
+      + '44 % des 344 ALPN, et deux contextes quelconques partagent <b>56 %</b> de leurs '
+      + 'ALPN actifs — ils sont deja presque indiscernables avant d atteindre les Kenyon '
+      + 'cells. Reguler APL n y change rien (ci-dessous) : aucune inhibition en aval ne '
+      + 'recupere une information detruite a l entree. Avec un <b>budget d ALPN constant</b>, '
+      + 'le meilleur point mesure est k=' + m.k + ' a <b>' + pc(m.biologique_test) + '</b>'
+      + (f0 ? ' contre ' + pc(f0.biologique_test) + ' sans budget' : '') + '.';
+  } catch (e) { panneauVide($('#g-budget'), e, 'python scripts/budget_entree.py'); }
+}
+
+async function chargerTemoins() {
+  try {
+    const t = await api('/api/temoin');
+    const k = Object.keys(t).filter(x => x !== 'ecart' && x !== 'ok');
+    tableau($('#t-temoins'),
+      [['Condition'], ['Aretes', 'n'], ['Generalisation', 'n'], ['Top-3', 'n']],
+      k.map(n => '<tr><td>' + esc(n) + '</td><td class="n">' + nf(t[n].aretes_mbon_mbon)
+        + '</td><td class="n">' + pc(t[n].test) + '</td><td class="n">'
+        + pc(t[n].test_top3) + '</td></tr>'));
+    $('#n-temoins').innerHTML = 'Couper les 386 aretes <b>MBON → MBON</b> ne change la '
+      + 'generalisation que de <b>' + (t.ecart * 100).toFixed(1).replace('.', ',')
+      + ' point</b>. La recurrence entre neurones de sortie n explique donc pas ce que le '
+      + 'reseau fait de mieux qu une lecture lineaire — une hypothese que seul ce temoin '
+      + 'permettait d ecarter.';
+  } catch (e) { panneauVide($('#t-temoins'), e, 'python scripts/temoin_mbon.py'); }
+}
+
+async function chargerCourbe() {
+  try {
+    const r = await api('/api/apprentissage');
+    const e = r.etapes || [];
+    if (!e.length) throw new Error('aucune etape');
+    const pts = e.map((p, i) => ({x: i + 1, y: p.test}));
+    const top = e.map((p, i) => ({x: i + 1, y: p.test_top3}));
+    const app = e.map((p, i) => ({x: i + 1, y: p.app}));
+    const marques = [];
+    for (let i = 1; i < e.length; i++)
+      if (e[i].kc !== e[i - 1].kc)
+        marques.push({x: i + 1, nom: '+' + nf(e[i].kc - e[i - 1].kc) + ' KC'});
+    const rep = r.plafonds && r.plafonds.biologique_test !== undefined
+      ? [{nom: 'repere biologique', y: r.plafonds.biologique_test, couleur: CO.chaud}] : [];
+    G.courbe($('#g-courbe'), [
+      {nom: 'Generalisation', couleur: CO.accent, points: pts},
+      {nom: 'Top-3', couleur: CO.bleu, points: top},
+      {nom: 'Extraits appris', couleur: CO.violet, points: app}
+    ], {x: 'epoques cumulees', hauteur: 270, marques: marques, reperes: rep});
+    const f = e[e.length - 1];
+    $('#p-courbe').textContent = nf(f.kc) + ' KC';
+    $('#n-courbe').innerHTML = 'Fin de course : <b>' + pc(f.test) + '</b> en '
+      + 'generalisation, top-3 ' + pc(f.test_top3) + ', avec ' + nf(f.kc)
+      + ' Kenyon cells. Les traits verticaux marquent les neurogeneses.';
+  } catch (e) { panneauVide($('#g-courbe'), e, 'python scripts/entrainement_long.py'); }
+}
+
+async function proposer() {
+  $('#err').textContent = ''; $('#btn-prop').disabled = true;
+  try {
+    const r = await api('/api/proposer', {method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({contexte: $('#ctx').value})});
+    $('#res').style.display = '';
+    $('#p-kc').textContent = nf(r.kc_actives) + ' / ' + nf(r.kc_total) + ' — '
+      + pc(r.kc_actives / r.kc_total);
+    $('#grille-kc').innerHTML = r.kc_apercu.map(v => '<i style="background:'
+      + (v > 0 ? 'rgba(90,210,168,' + (0.22 + 0.78 * Math.min(1, v)) + ')' : '#161c24')
+      + '"></i>').join('');
+    const max = Math.max.apply(null, r.votes.map(v => Math.abs(v.score)).concat([1e-6]));
+    $('#votes').innerHTML = r.votes.map(v => '<div class="vote"><code>' + esc(v.jeton)
+      + '</code><span class="jauge"><i style="width:' + (Math.max(0, v.score) / max * 100)
+      + '%"></i></span><small>' + v.score.toFixed(3) + '</small></div>').join('');
+  } catch (e) { $('#err').textContent = e.message; }
+  finally { $('#btn-prop').disabled = false; }
+}
+
+function majAppr(corpus, e) {
+  const l = [['Corpus', esc(corpus.source)],
+             ['Exemples appris / retenus', nf(corpus.exemples_app) + ' / ' + nf(corpus.exemples_test)],
+             ['Jeton majoritaire (retenu)', pc(corpus.base_majoritaire_test)],
+             ['Hasard', pc(corpus.hasard)]];
+  if (e) {
+    l.unshift(['Generalisation', pc(e.precision_test) + ' <span class="pastille">top-3 '
+               + pc(e.precision_test_top3) + '</span>', 'fort']);
+    l.splice(1, 0, ['Sur les extraits appris', pc(e.precision)], ['Lecons', nf(e.lecons)]);
+  }
+  lignes($('#stats-appr'), l);
+}
+
+function majJournal(st) {
+  const actif = st.en_cours;
+  $('#p-amelio').textContent = st.etat + (st.erreur ? ' — ' + st.erreur : '');
+  $('#p-amelio').className = 'pastille' + (actif ? ' actif' : '');
+  $('#btn-amelio').disabled = actif; $('#btn-stop').disabled = !actif;
+  $('#err-amelio').textContent = st.erreur || '';
+  if (!st.journal.length) {
+    $('#journal').innerHTML = '<tr><td class="note">Aucun cycle pour l instant.</td></tr>';
+    return;
+  }
+  tableau($('#journal'),
+    [['Cycle'], ['KC', 'n'], ['Precision', 'n'], ['Gain', 'n'], ['Top-3', 'n']],
+    st.journal.slice().reverse().map(j => '<tr><td>' + nf(j.cycle) + (j.neurogenese
+      ? ' <span class="pastille">+' + nf(j.neurogenese) + ' KC</span>' : '')
+      + '</td><td class="n">' + nf(j.kc) + '</td><td class="n">' + pc(j.precision)
+      + '</td><td class="n" style="color:' + (j.gain > 0 ? 'var(--accent)' : 'var(--doux)')
+      + '">' + (j.gain > 0 ? '+' : '') + pc(j.gain) + '</td><td class="n">'
+      + pc(j.top3) + '</td></tr>'));
+}
+
+function lancerSondage() {
+  if (sondage) return;
+  sondage = setInterval(async () => {
+    try {
+      const st = await api('/api/amelioration');
+      majJournal(st);
+      if (!st.en_cours) { clearInterval(sondage); sondage = null; await rafraichir(); }
+    } catch (e) { clearInterval(sondage); sondage = null; }
+  }, 2500);
+}
+
+async function avecBouton(btn, txt, fn) {
+  const old = btn.textContent;
+  btn.disabled = true; btn.textContent = txt; $('#err-appr').textContent = '';
+  try { await fn(); } catch (e) { $('#err-appr').textContent = e.message; }
+  finally { btn.disabled = false; btn.textContent = old; }
+}
+
+async function rafraichir() {
+  const c = await api('/api/circuit');
+  majCircuit(c); majCles(c); majAppr(c.corpus, c.dernier); majJournal(c.amelioration);
+  return c;
+}
+
+async function charger() {
+  try {
+    const s = await api('/api/sante');
+    $('#src').textContent = s.source + ' — hemisphere ' + s.side + ' — ' + nf(s.aretes)
+      + ' synapses ionotropiques, ' + nf(s.aretes_modulatrices) + ' modulatrices';
+    $('#moteur').textContent = s.moteur.gpu ? 'GPU · ' + s.moteur.detail : 'CPU · NumPy';
+    $('#moteur').className = 'pastille' + (s.moteur.gpu ? ' gpu' : '');
+    const c = await rafraichir();
+    if (c.amelioration && c.amelioration.en_cours) lancerSondage();
+    const v = await api('/api/vocabulaire');
+    $('#palette').innerHTML = v.jetons.map(j => '<code>' + esc(j) + '</code>').join('');
+    $('#palette').onclick = ev => {
+      if (ev.target.tagName === 'CODE') $('#ctx').value += ' ' + ev.target.textContent;
+    };
+  } catch (e) { $('#src').textContent = 'Erreur : ' + e.message; }
+  chargerStatsCircuit().catch(e => console.error('stats circuit', e));
+  chargerCorpus().catch(e => console.error('corpus', e));
+  chargerPlafonds(); chargerCroissance(); chargerContexte(); chargerTemoins();
+  chargerCourbe(); chargerBudget(); chargerConnectomes(); chargerCtxReel();
+  chargerMeilleure(); chargerHemispheres();
+}
+
+$('#btn-prop').onclick = proposer;
+$('#ctx').addEventListener('keydown', e => { if (e.key === 'Enter') proposer(); });
+$('#btn-lot').onclick = () => avecBouton($('#btn-lot'), 'Entrainement…', async () => {
+  await api('/api/entrainer-lot', {method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({epoques: +$('#epoques').value, taux: +$('#taux').value})});
+  await rafraichir(); chargerCourbe();
+});
+$('#btn-croitre').onclick = () => avecBouton($('#btn-croitre'), 'Neurogenese…', async () => {
+  await api('/api/croitre', {method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({kc: +$('#nkc').value})});
+  await rafraichir();
+});
+$('#btn-reset').onclick = () => avecBouton($('#btn-reset'), '…', async () => {
+  await api('/api/reinitialiser', {method: 'POST'}); await rafraichir();
+});
+$('#btn-amelio').onclick = async () => {
+  $('#err-amelio').textContent = '';
+  try {
+    majJournal(await api('/api/amelioration/demarrer', {method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({cycles: +$('#a-cycles').value, lecons: +$('#a-lecons').value,
+                            croissance: +$('#a-croissance').value})}));
+    lancerSondage();
+  } catch (e) { $('#err-amelio').textContent = e.message; }
+};
+$('#btn-stop').onclick = async () => {
+  try { majJournal(await api('/api/amelioration/arreter', {method: 'POST'})); }
+  catch (e) { $('#err-amelio').textContent = e.message; }
+};
+
+const sections = [].slice.call(document.querySelectorAll('section.bloc'));
+const liens = [].slice.call(document.querySelectorAll('#nav a'));
+addEventListener('scroll', () => {
+  const y = scrollY + 180;
+  let i = 0;
+  sections.forEach((s, k) => { if (s.offsetTop <= y) i = k; });
+  liens.forEach((a, k) => a.classList.toggle('actif', k === i));
+}, {passive: true});
+
+charger();
+</script>
+</body>
+</html>
