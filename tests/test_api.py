@@ -90,3 +90,38 @@ def test_resultats_absents_rendent_404_avec_la_commande(client, monkeypatch, tmp
 def test_amelioration_au_repos(client):
     d = client.get("/api/amelioration").get_json()
     assert d["ok"] and d["en_cours"] is False and d["journal"] == []
+
+
+@pytest.mark.parametrize("path", [
+    "/api/entrainer-lot", "/api/entrainer", "/api/reinitialiser",
+    "/api/amelioration/demarrer", "/api/amelioration/arreter", "/api/croitre",
+])
+def test_exposed_mutations_require_auth_before_side_effects(client, monkeypatch, path):
+    from dataclasses import replace
+    monkeypatch.setattr(application, "SETTINGS", replace(application.SETTINGS, host="0.0.0.0"))
+    monkeypatch.setenv("DROSO_API_TOKEN", "test-only-secret")
+    monkeypatch.setattr(store, "oublier", lambda: pytest.fail("unauthorized mutation"))
+    assert client.post(path, json={}).status_code == 401
+    assert client.post(path, json={}, headers={"Authorization": "Bearer wrong"}).status_code == 401
+
+
+def test_exposed_mutations_fail_closed_without_token(client, monkeypatch):
+    from dataclasses import replace
+    monkeypatch.setattr(application, "SETTINGS", replace(application.SETTINGS, host="0.0.0.0"))
+    monkeypatch.delenv("DROSO_API_TOKEN", raising=False)
+    assert client.post("/api/reinitialiser").status_code == 503
+
+
+def test_valid_token_reaches_existing_validation_and_reads_stay_public(client, monkeypatch):
+    from dataclasses import replace
+    monkeypatch.setattr(application, "SETTINGS", replace(application.SETTINGS, host="0.0.0.0"))
+    monkeypatch.setenv("DROSO_API_TOKEN", "test-only-secret")
+    headers = {"Authorization": "Bearer test-only-secret"}
+    assert client.post("/api/entrainer", json={"pas": 0}, headers=headers).status_code == 400
+    assert client.post("/api/proposer", json={"contexte": ""}).status_code == 400
+    assert client.get("/").status_code == 200
+
+
+def test_local_default_remains_compatible(client, monkeypatch):
+    monkeypatch.delenv("DROSO_API_TOKEN", raising=False)
+    assert client.post("/api/entrainer", json={"pas": 0}).status_code == 400
