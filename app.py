@@ -2,6 +2,9 @@
 from __future__ import annotations
 import json
 import logging
+import os
+import hmac
+import ipaddress
 import threading
 from pathlib import Path
 
@@ -48,6 +51,33 @@ _amelioration = Amelioration(mouche)
 
 def erreur(msg: str, code: int = 400):
     return jsonify({"ok": False, "erreur": msg}), code
+
+
+# Only mutating model endpoints need credentials; /api/proposer is read-only.
+# Loopback-only installations retain their existing local UI behavior.
+_MUTATING_PATHS = frozenset({
+    "/api/entrainer-lot", "/api/entrainer", "/api/reinitialiser",
+    "/api/amelioration/demarrer", "/api/amelioration/arreter", "/api/croitre",
+})
+
+
+@app.before_request
+def _autoriser_mutations():
+    if request.method != "POST" or request.path not in _MUTATING_PATHS:
+        return None
+    token = os.environ.get("DROSO_API_TOKEN", "")
+    try:
+        loopback_only = ipaddress.ip_address(SETTINGS.host).is_loopback
+    except ValueError:
+        loopback_only = SETTINGS.host.lower() == "localhost"
+    if not token and loopback_only:
+        return None
+    if not token:
+        return erreur("API mutante indisponible sans DROSO_API_TOKEN.", 503)
+    authorization = request.headers.get("Authorization", "")
+    if not hmac.compare_digest(authorization, "Bearer " + token):
+        return erreur("Authentification requise.", 401)
+    return None
 
 
 @app.errorhandler(ValueError)
